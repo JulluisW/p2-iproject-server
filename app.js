@@ -28,6 +28,12 @@ app.use((err,req,res,next)=>{
   } else if(err.name === 'JsonWebTokenError' || err.name === 'INVALID_TOKEN') {
     statusCode = 401;
     errorMsg = "Invalid token"
+  } else if(err.name === 'PRODUCT_NOT_FOUND') {
+    statusCode = 404;
+    errorMsg = "Product not found!"
+  } else if(err.name === 'FORBIDDEN') {
+    statusCode = 401;
+    errorMsg = "You are unauthorized"
   }
 
   res.status(statusCode).json({
