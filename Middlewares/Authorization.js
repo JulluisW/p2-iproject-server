@@ -23,3 +23,7 @@ const productAuthorization = async (req,res,next)=>{
     next(error)
   }
 }
+
+module.exports = {
+  productAuthorization
+}
