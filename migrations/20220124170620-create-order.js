@@ -8,10 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      orderList: {
-        allowNull: false,
-        type: Sequelize.ARRAY(Sequelize.TEXT)
-      },
       customerName: {
         allowNull: false,
         type: Sequelize.STRING
