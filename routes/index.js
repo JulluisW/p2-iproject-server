@@ -16,6 +16,7 @@ indexRouter.use("/product", productRouter);
 
 indexRouter.post("/payment", async (req, res, next) => {
   try {
+    const {orderId, amount}  = req.body;
     const midtransClient = require('midtrans-client');
 // Create Snap API instance
 let snap = new midtransClient.Snap({
@@ -26,8 +27,8 @@ let snap = new midtransClient.Snap({
 
 let parameter = {
     "transaction_details": {
-        "order_id": "Kipli00",
-        "gross_amount": 200000
+        "order_id": `${orderId}`,
+        "gross_amount": `${amount}`
     }, "credit_card":{
         "secure" : true
     }

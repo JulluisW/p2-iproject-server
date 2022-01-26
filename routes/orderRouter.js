@@ -37,7 +37,8 @@ orderRouter.get('/', async(req,res,next)=>{
 
     const resp = await Order.findAll({
       where: {
-        shopId: shop.id
+        shopId: shop.id,
+        status: "pending"
       }
     })
 
