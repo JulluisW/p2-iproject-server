@@ -23,6 +23,24 @@ shopRouter.post('/register', async(req,res,next)=>{
   }
 })
 
+shopRouter.get('/:userId', async(req,res,next)=>{
+  try {
+    const {userId} = req.params
+    const resp = await Shop.findOne({
+      include:["User"],
+      where: {
+        userId
+      }
+    })
+    
+    res.status(200).json(resp)
+
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
+}) 
+
 shopRouter.put('/edit', async(req,res,next) =>{
   try {
     const {name, imageUrl, motto, address, category} = req.body;
