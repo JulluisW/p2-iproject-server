@@ -5,7 +5,7 @@ const {Product} = require('../models/index.js')
 
 productRouter.post('/add', async(req,res,next) => {
   try {
-    const {name, description, price, bulkPrice, brand, shopId} = req.body;
+    const {name, description, price, bulkPrice, brand,imageUrl,shopId} = req.body;
 
     const newProduct = await Product.create({
       name,
@@ -13,6 +13,7 @@ productRouter.post('/add', async(req,res,next) => {
       price,
       bulkPrice,
       brand,
+      imageUrl,
       shopId,
     })
     res.status(201).json(newProduct)
@@ -23,7 +24,7 @@ productRouter.post('/add', async(req,res,next) => {
 
 productRouter.put('/:productId',productAuthorization,async(req,res,next) => {
   try {
-    const {name, description, price, bulkPrice, brand} = req.body;
+    const {name, description, price, bulkPrice, brand,imageUrl} = req.body;
     const {productId} = req.params;
 
     await Product.update({
@@ -32,6 +33,7 @@ productRouter.put('/:productId',productAuthorization,async(req,res,next) => {
       price,
       bulkPrice,
       brand,
+      imageUrl
     },{
       where: {
         id: productId

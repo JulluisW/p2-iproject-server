@@ -1,8 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-const {HashPassword} = require('../helper/helpers.js')
+"use strict";
+const { Model } = require("sequelize");
+const { HashPassword } = require("../helper/helpers.js");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,47 +11,65 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
-  User.init({
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: {
-        msg: "Email must be unique"
+  }
+  User.init(
+    {
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: "Email must be unique",
+        },
+        validate: {
+          notNull: {
+            msg: "Email is required",
+          },
+          notEmpty: {
+            msg: "Email is required",
+          },
+          isEmail: {
+            msg: "Invalid Email format",
+          },
+        },
       },
-      validate:{
-        notNull: {
-          msg: "Email is required"
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Password is required",
+          },
+          notEmpty: {
+            msg: "Password is required",
+          },
         },
-        notEmpty:{
-          msg: "Email is required"
+      },
+      role: DataTypes.STRING,
+      phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: "This Phone number has already registered! Please enter another phone number!"
         },
-        isEmail: {
-          msg: "Invalid Email format"
-        }
-      }
+        validate: {
+          notNull: {
+            msg: "Phone number is required",
+          },
+          notEmpty: {
+            msg: "Phone number is required",
+          },
+        },
+      },
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate:{
-        notNull: {
-          msg: "Password is required"
-        },
-        notEmpty:{
-          msg: "Password is required"
-        }
-      }
-    },
-    role: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
 
-  User.beforeCreate((user,options)=>{
-    user.password = HashPassword(user.password)
-    user.role = 'User'
+  User.beforeCreate((user, options) => {
+    user.password = HashPassword(user.password);
+    user.role = "User";
   });
 
   return User;
