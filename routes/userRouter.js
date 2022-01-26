@@ -40,7 +40,7 @@ userRouter.post('/login', async (req,res,next) => {
         email:email
       }
     })
-    console.log(user);
+    // console.log(user);
     if(!user || !CompareHash(password, user.password)) {
       throw {name: "INVALID_EMAIL_PASSWORD"}
     }
@@ -48,7 +48,8 @@ userRouter.post('/login', async (req,res,next) => {
       id: user.id
     }
     res.status(200).json({
-      access_token: SignToken(payload)
+      access_token: SignToken(payload),
+      userId: user.id
     })
     
   } catch (error) {
