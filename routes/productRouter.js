@@ -1,7 +1,27 @@
 const express = require('express');
 const { productAuthorization } = require('../Middlewares/Authorization.js');
 const productRouter = express.Router()
-const {Product} = require('../models/index.js')
+const {Product, Shop} = require('../models/index.js')
+
+productRouter.get('/', async(req,res,next)=>{
+  try {
+    const shop = await Shop.findOne({
+      where: {
+        userId : req.currentUser.userId
+      }
+    })
+
+    const resp  = await Product.findAll({
+      where: {
+        shopId: shop.id
+      }
+    })
+    res.status(200).json(resp);
+  } catch (error) {
+    
+    next(error)
+  }
+})
 
 productRouter.post('/add', async(req,res,next) => {
   try {
@@ -21,6 +41,7 @@ productRouter.post('/add', async(req,res,next) => {
     next(error)
   }
 })
+
 
 productRouter.put('/:productId',productAuthorization,async(req,res,next) => {
   try {
