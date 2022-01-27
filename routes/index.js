@@ -6,7 +6,36 @@ const orderRouter = require("./orderRouter")
 const productRouter = require("./productRouter.js");
 const Authentication = require("../Middlewares/Authentication.js");
 
+const {Order} = require('../models/index')
+
 indexRouter.use("/", userRouter);
+
+indexRouter.get("/callback", async (req, res, next)=>{
+  try {
+    const {transaction_status, order_id} = req.query;
+    let orderId = "";
+    
+    for(let i = 0; i < order_id.length; i++){
+      if(order_id[i] != '-') {
+        orderId += String(order_id[i])
+      } else {
+        break
+      }
+    }
+
+    const result = await Order.update({
+      status: transaction_status
+    },{
+      where: {
+        id: +orderId
+      }
+    })
+
+    res.redirect('https://e-bon-iproject.web.app/')
+  } catch (error) {
+    next(error)
+  }
+})
 
 indexRouter.use(Authentication);
 
@@ -16,6 +45,7 @@ indexRouter.use("/product", productRouter);
 
 indexRouter.post("/payment", async (req, res, next) => {
   try {
+    const {orderId, amount} = req.body;
     const midtransClient = require('midtrans-client');
 // Create Snap API instance
 let snap = new midtransClient.Snap({
@@ -26,8 +56,8 @@ let snap = new midtransClient.Snap({
 
 let parameter = {
     "transaction_details": {
-        "order_id": "Kipli00",
-        "gross_amount": 200000
+        "order_id": orderId,
+        "gross_amount": amount
     }, "credit_card":{
         "secure" : true
     }
